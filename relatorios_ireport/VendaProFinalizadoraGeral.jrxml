@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VendaProFinalizadoraGeral" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="374331d2-2c70-4ff3-bfe4-972ea5adfd24">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="dataIni" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dataFi" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+A.TRNDAT,
+A.COD_FINALIZADORA,
+B.DESCRICAO_FINALIZADORA,
+to_char(CAST(SUM (A.VALOR_PAGO - A.TROCO)AS DECIMAL(18,2)), 'L9G999G990D99') AS TOTAL
+FROM
+FINALIZACAO A INNER JOIN  FINALIZADORA B
+ON
+A.COD_FINALIZADORA=CAST(B.COD_FINALIZADORA AS TEXT)
+WHERE
+A.TRNDAT BETWEEN $P{dataIni} AND $P{dataFi}
+
+
+
+GROUP BY A.TRNDAT,A.COD_FINALIZADORA,B.DESCRICAO_FINALIZADORA
+ORDER BY A.TRNDAT DESC]]>
+	</queryString>
+	<field name="trndat" class="java.sql.Date"/>
+	<field name="cod_finalizadora" class="java.lang.String"/>
+	<field name="descricao_finalizadora" class="java.lang.String"/>
+	<field name="total" class="java.lang.String"/>
+	<group name="trndat">
+		<groupExpression><![CDATA[$F{trndat}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement style="SubTitle" x="47" y="13" width="506" height="24" forecolor="#006600" uuid="f7b22d48-3fbc-4216-adc7-dc655c88d711"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{trndat}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="f6ee666f-7f4e-41fd-9632-6403af07d36f"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="a4bdf7f0-abd5-49a3-b827-f4ba711991e2"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[G20PDV]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="0" y="46" width="370" height="22" uuid="d3802c3f-bad8-4a50-bddf-661acad4c238"/>
+				<text><![CDATA[Relatório de Venda por Finalizadora (Geral)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="9a7a4a39-c676-430c-8ce1-be379162e8e9"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="185" height="15" uuid="3f2fb869-6433-4b65-a240-ce7c0e815342"/>
+				<text><![CDATA[Código da Finalizadora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="185" y="19" width="185" height="15" uuid="677f7e01-9647-4b9d-94d5-df6ead01bbf1"/>
+				<text><![CDATA[Descrição da Finalizadora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="370" y="19" width="185" height="15" uuid="f9457c00-f192-4d5a-bc3a-42fadeae010b"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="4f8c5865-a052-4330-b075-c974cc2d640d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="185" height="15" uuid="58b4f331-a4f6-4852-bdfa-0b05b86a7dc4"/>
+				<textFieldExpression><![CDATA[$F{cod_finalizadora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="185" y="0" width="185" height="15" uuid="7e3d0774-4dc7-4325-9a5a-6a32814f9bef"/>
+				<textFieldExpression><![CDATA[$F{descricao_finalizadora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="370" y="0" width="185" height="15" uuid="f2366a92-07e5-40cf-8d50-b4248ed7d52b"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="7bd20b78-38ab-467f-81d7-1e02f7b39573"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="951fb960-e49c-48c5-b591-92300b9018a1"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="9a66eacf-3b3f-4906-a4f2-14cad86fc1ba"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="9272c9ca-e813-4238-b092-3f5c99381604"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

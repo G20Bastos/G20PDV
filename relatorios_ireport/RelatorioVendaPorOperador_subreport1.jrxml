@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioVendaPorOperador_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6589d6a8-0ec0-4962-ba88-16c0225d8c40">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="trnseq" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="trnseq_foreign" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+TO_CHAR(CAST(SUM(A.VALOR_PAGO) AS DECIMAL(18,2)), 'L9G999G990D99') AS VALOR_PAGO_POR_FINALIZADORA,
+B.DESCRICAO_FINALIZADORA
+FROM
+FINALIZACAO A
+INNER JOIN FINALIZADORA B
+ON
+A.COD_FINALIZADORA=CAST(B.COD_FINALIZADORA AS TEXT)
+
+WHERE
+A.TRNSEQ = $P{trnseq}
+GROUP BY B.DESCRICAO_FINALIZADORA]]>
+	</queryString>
+	<field name="valor_pago_por_finalizadora" class="java.lang.String"/>
+	<field name="descricao_finalizadora" class="java.lang.String"/>
+	<filterExpression><![CDATA[((net.sf.jasperreports.engine.data.JRXmlDataSource)$P{RelatorioVendaPorOperador}).dataSource(trnseq)]]></filterExpression>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="37" y="0" width="100" height="20" uuid="bfc0ebab-0e80-44fe-9239-1eb269e52273"/>
+				<text><![CDATA[descricao_finalizadora]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="137" y="0" width="100" height="20" uuid="56fe0245-edea-457a-8422-1cd9917aff19"/>
+				<textFieldExpression><![CDATA[$F{descricao_finalizadora}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioMaisVendidos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d22bf87e-c496-4a6c-8f66-98746467ac6d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="relDataIni" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="relDataFin" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="relTrntip" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+B.PROCOD,
+C.PRODES,
+SUM (B.QUANTIDADE) AS QUANTIDADE,
+SUM (B.ITVVLRTOT) AS SOMA
+
+FROM TRANSACAO A
+INNER JOIN
+ITEVDA B ON
+A.TRNSEQ =  B.TRNSEQ
+INNER JOIN  PRODUTO C
+ON
+C.PROCOD=B.PROCOD
+WHERE A.TRNTIP=$P{relTrntip}
+AND
+A.TRNDAT BETWEEN $P{relDataIni} AND $P{relDataFin}
+
+GROUP BY B.PROCOD, C.PRODES
+ORDER BY SOMA DESC]]>
+	</queryString>
+	<field name="procod" class="java.lang.String"/>
+	<field name="prodes" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.Float"/>
+	<field name="soma" class="java.lang.Float"/>
+	<group name="procod">
+		<groupExpression><![CDATA[$F{procod}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement style="SubTitle" x="47" y="13" width="506" height="24" forecolor="#006600" uuid="64eb35ae-67e8-4b19-a223-4984a65d98c5"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{procod}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="a0df4074-a39f-48ed-86fa-4e8ef31823c5"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="73b8ad27-f63c-48b3-8d0b-3995b299d973"/>
+				<textElement verticalAlignment="Middle">
+					<font size="22"/>
+				</textElement>
+				<text><![CDATA[Venda por produto]]></text>
+			</staticText>
+			<image>
+				<reportElement x="493" y="13" width="48" height="48" uuid="6393529a-670e-4b84-a1a9-cd18f09f27b3"/>
+				<imageExpression><![CDATA["C:\\Users\\Gabriel Bastos\\Pictures\\if_lollypop-lollipop.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="394" y="25" width="99" height="36" uuid="3626d089-a540-4e19-8667-8179ceaf0435"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[       G20PDV ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="1808f95b-a57f-44e3-9d5e-27f8f9904928"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="100" height="15" uuid="da6e3810-2f10-4aa8-896e-5722695b6a1c"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="277" y="19" width="277" height="15" uuid="009baa7c-6c24-4455-ae82-9619b27446d4"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="129" y="19" width="100" height="15" uuid="d2bb73e6-ad8d-4305-90f0-6369018648c0"/>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="3458f989-8765-4cca-b3dd-3a4e0b842ae5"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="89" height="15" uuid="63a1c50e-7663-4384-b6a5-d0e848ddac94"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="277" y="0" width="277" height="15" uuid="08c2405e-cd88-4883-877f-19b8c0bafcba"/>
+				<textFieldExpression><![CDATA[$F{soma}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="115" y="0" width="100" height="15" uuid="8d8a5bdf-6b74-4921-a35c-553a5dde8256"/>
+				<textFieldExpression><![CDATA[$F{prodes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="8925cecf-b32b-4d00-ad3f-f1ec3f6c6989"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="d0bef747-d4d1-4ad3-b1cb-882fd1660b35"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="f0601789-3733-4c02-ab0e-177841f6e46c"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="affd19e8-b2bb-4c36-92b9-8d0e8f442ec3"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="180" y="0" width="193" height="20" uuid="7f824b97-b752-44b8-a1b7-a1de68764fed"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[G20PDV - Versão 18.2 build 1001]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

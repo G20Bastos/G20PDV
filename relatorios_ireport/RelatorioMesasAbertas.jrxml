@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioConferencia" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1b1bd247-af7d-4301-bf42-a1a611fa5503">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString>
+		<![CDATA[SELECT
+MESA,
+NOMEFUNC_PRE,
+PRODES_PRE,
+SUM(QUANTIDADE_PRE) AS QUANTIDADE_PRE
+FROM CONSUMO
+GROUP BY PRODES_PRE, MESA, NOMEFUNC_PRE
+ORDER BY MESA ASC]]>
+	</queryString>
+	<field name="mesa" class="java.lang.Integer"/>
+	<field name="nomefunc_pre" class="java.lang.String"/>
+	<field name="prodes_pre" class="java.lang.String"/>
+	<field name="quantidade_pre" class="java.lang.Float"/>
+	<group name="mesa">
+		<groupExpression><![CDATA[$F{mesa}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement style="SubTitle" x="116" y="13" width="102" height="24" forecolor="#006600" uuid="60232161-1a32-4587-a57e-e3fa1e94dde6"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{mesa}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="9a0a0f22-90e0-4127-9073-800e7dfdf2dd"/>
+				</rectangle>
+				<staticText>
+					<reportElement style="Column header" x="46" y="13" width="60" height="24" forecolor="#006600" uuid="e1759990-0cea-494e-811d-73b94ac7604c"/>
+					<textElement>
+						<font size="18"/>
+					</textElement>
+					<text><![CDATA[Mesa:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="25">
+				<staticText>
+					<reportElement style="Column header" x="22" y="10" width="61" height="15" uuid="30fbc1a1-a8fc-439a-ae73-1eb5ab5d49a1"/>
+					<text><![CDATA[Garçom:]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Detail" x="88" y="10" width="185" height="15" uuid="3d8d0879-859f-4923-b178-b9e436011e36"/>
+					<textFieldExpression><![CDATA[$F{nomefunc_pre}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="e9b0ad55-ae60-4a2a-b2d9-00ffac39919d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Mesas abertas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="715d3a5c-075f-46d7-8283-d40fafd21c8d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="185" y="19" width="185" height="15" uuid="934ff13f-e5c1-400b-99db-25dcdcdec948"/>
+				<text><![CDATA[Produto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="370" y="19" width="185" height="15" uuid="7e953c6b-e27e-433b-86c5-3903b335bffc"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="d6be9b6b-e994-4cfb-850c-a29fcdf51dd0"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="185" y="0" width="185" height="15" uuid="e5c3503c-c506-4b38-8809-eb1e75f996ed"/>
+				<textFieldExpression><![CDATA[$F{prodes_pre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="370" y="0" width="185" height="15" uuid="d58d5879-1936-4b86-857d-510fb00c52c8"/>
+				<textFieldExpression><![CDATA[$F{quantidade_pre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="f70294d7-3cfd-46fe-8547-7e466ec2fcc2"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="f988169f-6ec4-4c04-9f74-174154ae10d5"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="23d44c08-ceed-4b0f-8ec1-4ddef35c90c6"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="9707635d-7fcb-4e46-a576-c31b51fc41fd"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

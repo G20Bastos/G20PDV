@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio_Produtos_Internos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e81b45af-9f00-441e-92d9-36fddb8f7e98">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString>
+		<![CDATA[SELECT
+PROCOD,
+PRODES,
+QUANTIDADE,
+(
+SELECT COUNT(*) FROM PRODUTO) AS TOTAL,
+(
+SELECT CAST(SUM(QUANTIDADE)AS bigint) FROM PRODUTO) AS QTDE_ITENS
+FROM PRODUTO
+WHERE INTERNO='SIM'
+ORDER BY PRODES ASC]]>
+	</queryString>
+	<field name="procod" class="java.lang.String"/>
+	<field name="prodes" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.Float"/>
+	<field name="total" class="java.lang.Long"/>
+	<field name="qtde_itens" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="4b394af6-313b-44c1-b603-ed130906adca"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[G20PDV]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="23" y="46" width="326" height="22" uuid="b554319f-4e26-4a1a-9e7b-b47724dac2a8"/>
+				<text><![CDATA[Relatório de produtos (situação atual)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="93dd800e-7443-496e-9860-c3fe81e97c4c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="111" height="15" uuid="dbed6a88-7c97-4843-97c7-3f93714aef38"/>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="127" y="19" width="111" height="15" uuid="57a669ef-fe59-45a0-8bb5-614fabb2fb04"/>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="262" y="19" width="111" height="15" uuid="5f395752-507e-4cbb-a671-851f71620d46"/>
+				<text><![CDATA[Qtde em estoque]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="e4e7ddff-8a76-45d9-9c62-cd8f0ccc2ed4"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="111" height="15" uuid="7734429c-f2b8-45b3-9374-9b1b871c4401"/>
+				<textFieldExpression><![CDATA[$F{procod}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="126" y="0" width="111" height="15" uuid="a09952f1-8b40-4f6d-8ab7-cfc3040e0578"/>
+				<textFieldExpression><![CDATA[$F{prodes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="262" y="0" width="111" height="15" uuid="dafda9e2-4a9c-4dbb-8992-413e899ed596"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="56" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="88a5e1c9-83ae-4dbf-9fb5-2490e4005620"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="23" y="16" width="188" height="15" uuid="4ad00692-dac1-40d3-a15b-188e3193ab12"/>
+				<text><![CDATA[Total de produtos cadastrados]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Detail" x="222" y="16" width="111" height="15" uuid="f0fd255f-723c-4b13-b8d6-09ea195dfba7"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="23" y="34" width="156" height="15" uuid="1bae03ac-e4ba-4c95-a639-8a33943ae4bb"/>
+				<text><![CDATA[Total de itens (unidades)]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Detail" x="222" y="34" width="111" height="15" uuid="c068caf8-c6ba-4c79-903b-d30cf7645fc8"/>
+				<textFieldExpression><![CDATA[$F{qtde_itens}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="94451238-971f-4000-b45c-3adc04dd5e56"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="d2b8ba7c-14e8-4b57-a7d7-8bb3789282c9"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="7c4034ee-8db0-4171-ab30-51dd43244bb7"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

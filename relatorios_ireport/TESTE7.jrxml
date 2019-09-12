@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TESTE7" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56d37201-627d-46c3-a14e-71cd15db7fde">
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+(
+SELECT SUM (TRNVLR) FROM TRANSACAO  WHERE FUNCOD='20' AND TRNDAT BETWEEN '2018-02-01' AND '2018-02-23'  )AS VENDA_BRUTA,
+(
+SELECT COALESCE(SUM (TRNVLR),0) FROM TRANSACAO WHERE TRNTIP='7' AND FUNCOD='20' AND TRNDAT BETWEEN '2018-02-01' AND '2018-02-23')AS CANCELAMENTOS,
+(SELECT (SELECT SUM (TRNVLR) FROM TRANSACAO WHERE FUNCOD='20' AND TRNDAT BETWEEN '2018-02-01' AND '2018-02-23') - (SELECT COALESCE(SUM (TRNVLR),0) FROM TRANSACAO WHERE TRNTIP='7' AND FUNCOD='20' AND TRNDAT BETWEEN '2018-02-01' AND '2018-02-23') )AS VENDA_LIQUIDA,
+A.TRNSEQ,
+A.FUNCOD,
+A.TRNVLR,
+A.TRNDAT,
+A.PLACA,
+A.NOME_CLIENTE,
+B.PROCOD,
+B.QUANTIDADE,
+B.ITVVLRTOT,
+C.PRODES,
+D.COD_FINALIZADORA,
+E.DESCRICAO_FINALIZADORA,
+F.NOME_FUNCIONARIO
+
+FROM TRANSACAO A
+INNER JOIN
+ITEVDA B ON
+A.TRNSEQ =  B.TRNSEQ
+INNER JOIN  PRODUTO C
+ON
+C.PROCOD=B.PROCOD
+INNER JOIN FINALIZACAO D
+ON
+A.TRNSEQ=D.TRNSEQ
+INNER JOIN FINALIZADORA E
+ON
+D.COD_FINALIZADORA=CAST(E.COD_FINALIZADORA AS TEXT)
+INNER JOIN FUNCIONARIO F
+ON
+A.FUNCOD=CAST(F.FUNCOD AS TEXT)
+WHERE
+
+A.TRNDAT BETWEEN '2018-02-01' AND '2018-02-23'
+AND
+A.FUNCOD= '20'
+
+ORDER BY A.TRNDAT DESC]]>
+	</queryString>
+	<field name="venda_bruta" class="java.lang.Float"/>
+	<field name="cancelamentos" class="java.lang.Float"/>
+	<field name="venda_liquida" class="java.lang.Float"/>
+	<field name="trnseq" class="java.lang.Integer"/>
+	<field name="funcod" class="java.lang.String"/>
+	<field name="trnvlr" class="java.lang.Float"/>
+	<field name="trndat" class="java.sql.Date"/>
+	<field name="placa" class="java.lang.String"/>
+	<field name="nome_cliente" class="java.lang.String"/>
+	<field name="procod" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.Float"/>
+	<field name="itvvlrtot" class="java.lang.Float"/>
+	<field name="prodes" class="java.lang.String"/>
+	<field name="cod_finalizadora" class="java.lang.String"/>
+	<field name="descricao_finalizadora" class="java.lang.String"/>
+	<field name="nome_funcionario" class="java.lang.String"/>
+	<group name="trndat">
+		<groupExpression><![CDATA[$F{trndat}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement style="SubTitle" x="47" y="13" width="506" height="24" forecolor="#006600" uuid="4e7dbb7b-7cbf-4347-aec0-b4ac7e4ac0af"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{trndat}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="84ef5f66-5561-4800-98b7-dab2d90e290d"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<group name="nome_cliente">
+		<groupExpression><![CDATA[$F{nome_cliente}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField>
+					<reportElement style="SubTitle" x="0" y="4" width="460" height="20" uuid="afb6702d-6dd5-4851-b8d0-e20037454ace"/>
+					<textElement>
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nome_cliente}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<image>
+				<reportElement x="275" y="0" width="300" height="64" uuid="382c80b0-e94d-496f-ba86-35bd2c3ca2f4"/>
+				<imageExpression><![CDATA["leaf_banner_green.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="212ca58f-3ba2-43d9-a235-a229a1df657d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Leaf Green Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="100" y="46" width="174" height="22" uuid="62d51887-d6ae-4bb8-9279-3b3657d14828"/>
+				<text><![CDATA[Leaf Green SubTitle]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="6d3ddf14-0942-4833-9a26-950eee08514f"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="39" height="15" uuid="48289c1d-0b33-4d7e-8ecc-d7f5213a6e13"/>
+				<text><![CDATA[venda_bruta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="39" y="19" width="39" height="15" uuid="73dae5ab-75b6-402b-a9b9-a0bdf9df2969"/>
+				<text><![CDATA[cancelamentos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="78" y="19" width="39" height="15" uuid="04c7cfde-ca01-42da-af82-8c1e7080633c"/>
+				<text><![CDATA[venda_liquida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="117" y="19" width="39" height="15" uuid="652208ef-bcca-49fd-ba03-6217a6fa1696"/>
+				<text><![CDATA[trnseq]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="156" y="19" width="39" height="15" uuid="1c9c9df2-4e35-4bbd-9253-9413203e2669"/>
+				<text><![CDATA[funcod]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="195" y="19" width="39" height="15" uuid="697e45c7-e0a2-4ded-a6ab-22b8cdc19e9e"/>
+				<text><![CDATA[trnvlr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="234" y="19" width="39" height="15" uuid="db598c34-962d-4809-86e6-6c0daa63cbb6"/>
+				<text><![CDATA[placa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="273" y="19" width="39" height="15" uuid="95180b40-15f8-4247-81cc-a61a49b315bf"/>
+				<text><![CDATA[procod]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="312" y="19" width="39" height="15" uuid="e3ede190-a903-477b-8ac1-698ebbfc0875"/>
+				<text><![CDATA[quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="351" y="19" width="39" height="15" uuid="9ed17c4b-61ef-4d2f-b73e-7666a2390793"/>
+				<text><![CDATA[itvvlrtot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="390" y="19" width="39" height="15" uuid="f79c3582-56ad-4385-96f9-175f0d2f0204"/>
+				<text><![CDATA[prodes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="429" y="19" width="39" height="15" uuid="f75fcb7a-3a26-43af-ac0c-3bfbd025447b"/>
+				<text><![CDATA[cod_finalizadora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="468" y="19" width="39" height="15" uuid="7e08f060-ac7a-445b-be44-92a048d1cae4"/>
+				<text><![CDATA[descricao_finalizadora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="507" y="19" width="39" height="15" uuid="b61a5ae9-15f4-43c5-8874-61996ddc5337"/>
+				<text><![CDATA[nome_funcionario]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="17acb5dc-e30f-41ef-ba05-7d7699cb5723"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="39" height="15" uuid="a830cbb3-d9db-44c3-b856-c3c0703856e6"/>
+				<textFieldExpression><![CDATA[$F{venda_bruta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="39" y="0" width="39" height="15" uuid="8c3f01e4-bbb0-4124-8308-019b8a6e7140"/>
+				<textFieldExpression><![CDATA[$F{cancelamentos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="78" y="0" width="39" height="15" uuid="0372ebab-3004-4267-bdf4-a8eb7f44e26e"/>
+				<textFieldExpression><![CDATA[$F{venda_liquida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="117" y="0" width="39" height="15" uuid="8eb64987-2c66-4c6f-8dcb-a7ffe2ab7ba1"/>
+				<textFieldExpression><![CDATA[$F{trnseq}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="156" y="0" width="39" height="15" uuid="f62737d5-6bb0-484a-a478-f0f001f88f45"/>
+				<textFieldExpression><![CDATA[$F{funcod}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="195" y="0" width="39" height="15" uuid="b488f283-4c3a-4935-9ce1-87b7c17ceada"/>
+				<textFieldExpression><![CDATA[$F{trnvlr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="234" y="0" width="39" height="15" uuid="8482128f-51a7-4f95-bc7b-56582a7142a8"/>
+				<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="273" y="0" width="39" height="15" uuid="f8f7a9da-9456-4160-8af8-c75da0f13ff4"/>
+				<textFieldExpression><![CDATA[$F{procod}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="312" y="0" width="39" height="15" uuid="ffb50db0-7373-4976-a037-d466f6af5976"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="351" y="0" width="39" height="15" uuid="3ea8ec7f-e39a-4f86-b9aa-28054ff0a911"/>
+				<textFieldExpression><![CDATA[$F{itvvlrtot}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="390" y="0" width="39" height="15" uuid="4d9d4a76-58ab-4e85-950b-e5c307efc362"/>
+				<textFieldExpression><![CDATA[$F{prodes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="429" y="0" width="39" height="15" uuid="950b1fdd-ebdc-41ff-998f-1ea63df07ee8"/>
+				<textFieldExpression><![CDATA[$F{cod_finalizadora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="468" y="0" width="39" height="15" uuid="26259b1f-9d7a-4afc-948c-6cf872c088fb"/>
+				<textFieldExpression><![CDATA[$F{descricao_finalizadora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="507" y="0" width="39" height="15" uuid="dceaa3de-ca88-49a1-93cb-ede3ac1c25d3"/>
+				<textFieldExpression><![CDATA[$F{nome_funcionario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="7c5cdcb7-c13c-4d1f-b7d5-db7fec6cf146"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="b932d28e-d8b9-46c8-96a4-0c31197800e9"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="77e754e9-1f01-45d5-8da3-79f5f7fa26de"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="8335da9b-ccc2-46e9-9598-902bdc82b679"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
